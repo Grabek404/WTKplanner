@@ -1,12 +1,122 @@
 # Algorytm podziału subwencji AGH – WTK
 
-## KROK 1 — Zbieramy dane źródłowe
+## Wprowadzenie
 
-Algorytm potrzebuje 4 grup danych.
+Niniejszy dokument przedstawia uproszczony opis algorytmu podziału subwencji stosowanego w AGH oraz sposób jego wykorzystania do planowania rozwoju Wydziału Technologii Kosmicznych (WTK).
+
+Celem dokumentu nie jest odtworzenie wszystkich szczegółów formalnych uchwały, lecz pokazanie:
+
+* jakie dane wpływają na wysokość subwencji,
+* które parametry mają największe znaczenie,
+* jak interpretować wyniki algorytmu,
+* jakie działania mogą zwiększyć subwencję WTK w kolejnych latach.
+
+Dla WTK szczególnie istotne są:
+
+1. liczba studentów,
+2. liczba studentów zagranicznych,
+3. struktura kadry,
+4. kategoria naukowa,
+5. przychody projektowe.
 
 ---
 
-# A. Studenci
+# Główne równanie algorytmu
+
+Najpierw wyliczana jest część algorytmiczna:
+
+```text
+D_alg
+=
+0.33 × Sp
++
+0.33 × Na
++
+0.29 × B
++
+0.05 × P
+```
+
+gdzie:
+
+* `Sp` – udział studencki,
+* `Na` – udział kadrowy,
+* `B` – udział badawczy,
+* `P` – udział projektowy.
+
+## Wagi algorytmu
+
+| Składnik | Waga |
+| -------- | ---: |
+| Studenci |  33% |
+| Kadra    |  33% |
+| Badania  |  29% |
+| Projekty |   5% |
+
+---
+
+# Mechanizm historyczny
+
+Ostateczna subwencja nie zależy wyłącznie od aktualnych danych.
+
+AGH stosuje mechanizm stabilizacyjny:
+
+```text
+D_i
+=
+0.5 × D_hist
++
+0.5 × D_alg
+```
+
+gdzie:
+
+* `D_hist` – udział jednostki w poprzednim roku,
+* `D_alg` – udział wynikający z aktualnych parametrów.
+
+Oznacza to, że:
+
+```text
+50% wyniku
+=
+poprzedni rok
+
+50% wyniku
+=
+nowy algorytm
+```
+
+Dzięki temu nawet duże zmiany liczby studentów lub kadry nie przekładają się natychmiast na pełną zmianę subwencji.
+
+---
+
+# Specyfika WTK
+
+Wydział Technologii Kosmicznych został utworzony 1 kwietnia 2025 roku.
+
+WTK nie posiadał własnej historii subwencji porównywalnej z pozostałymi wydziałami AGH.
+
+Dlatego bardzo prawdopodobne jest, że przy pierwszym podziale środków zastosowano dodatkowe mechanizmy związane z uruchomieniem nowej jednostki.
+
+Można to uprościć do zależności:
+
+```text
+Subwencja WTK
+≈
+Finansowanie startowe
++
+Wpływ algorytmu
+```
+
+Dlatego odtworzenie kwoty około 5 mln zł wyłącznie na podstawie wzorów może nie być możliwe bez danych historycznych i decyzji organizacyjnych podjętych przy tworzeniu wydziału.
+
+---
+
+# KROK 1 — Zbieramy dane źródłowe
+
+Algorytm potrzebuje 4 grup danych.
+
+## A. Studenci
 
 ### Źródło danych
 
@@ -24,7 +134,7 @@ Algorytm potrzebuje 4 grup danych.
 
 ---
 
-# B. Kadra
+## B. Kadra
 
 ### Źródło danych
 
@@ -44,7 +154,7 @@ Dodatkowo osobno raportowana jest kadra zagraniczna.
 
 ---
 
-# C. Badania
+## C. Badania
 
 ### Źródło danych
 
@@ -59,7 +169,7 @@ Dodatkowo osobno raportowana jest kadra zagraniczna.
 
 ---
 
-# D. Projekty
+## D. Projekty
 
 ### Źródło danych
 
@@ -86,15 +196,11 @@ Dla każdego studenta:
 Student = Uri × Wk × Wz
 ```
 
-gdzie:
-
 | Parametr | Znaczenie                |
 | -------- | ------------------------ |
 | Uri      | udział studenta          |
 | Wk       | kosztochłonność kierunku |
 | Wz       | współczynnik zagraniczny |
-
----
 
 ## WTK – Space Technologies
 
@@ -148,8 +254,6 @@ Zakładamy:
 ΣESt = 25 000
 ```
 
-Wtedy:
-
 ```text
 Sp = ESt / ΣESt
 
@@ -179,8 +283,6 @@ udziału studenckiego AGH.
 | Adiunkt          |  1.5 |
 | Pozostali        | 1.25 |
 
----
-
 ## Kadra zagraniczna
 
 | Stanowisko       | Waga |
@@ -190,15 +292,7 @@ udziału studenckiego AGH.
 | Adiunkt          |  1.8 |
 | Pozostali        |  1.5 |
 
----
-
-## Przykład WTK
-
-6 profesorów
-
-5 profesorów uczelni
-
-28 adiunktów
+### Przykład WTK
 
 ```text
 6 × 2.5
@@ -226,8 +320,6 @@ Zakładamy:
 ΣNa* = 3500
 ```
 
-Wtedy:
-
 ```text
 Na = 67 / 3500
 
@@ -246,31 +338,17 @@ udziału kadrowego AGH.
 
 # KROK 6 — Liczymy badania
 
-Wzór:
-
 ```text
 B* = N × KS × Kn
 ```
 
-gdzie:
-
-| Parametr | Znaczenie                  |
-| -------- | -------------------------- |
-| N        | liczba N                   |
-| KS       | kosztochłonność dyscypliny |
-| Kn       | współczynnik kategorii     |
-
----
-
-## WTK
+### WTK
 
 ```text
 N = 35
 KS = 3.25
-Kn = 1.0 (kategoria A)
+Kn = 1.0
 ```
-
-Obliczenie:
 
 ```text
 35 × 3.25 × 1.0
@@ -284,15 +362,11 @@ Otrzymujemy:
 B* = 113.75
 ```
 
----
-
 Zakładamy:
 
 ```text
 ΣB = 7000
 ```
-
-Wtedy:
 
 ```text
 B = 113.75 / 7000
@@ -319,14 +393,10 @@ WTK:
 5 000 000 zł
 ```
 
-Zakładamy:
-
 ```text
 AGH:
 300 000 000 zł
 ```
-
-Wtedy:
 
 ```text
 P = 5 000 000 / 300 000 000
@@ -345,19 +415,6 @@ udziału projektowego AGH.
 ---
 
 # KROK 8 — Łączymy wszystkie składniki
-
-## Wagi algorytmu
-
-| Składnik | Waga |
-| -------- | ---: |
-| Studenci | 0.33 |
-| Kadra    | 0.33 |
-| Badania  | 0.29 |
-| Projekty | 0.05 |
-
----
-
-Wzór:
 
 ```text
 D_alg
@@ -390,8 +447,6 @@ Otrzymujemy udział WTK w nowej części algorytmu.
 
 # KROK 9 — Składnik historyczny
 
-Najważniejszy element algorytmu.
-
 ```text
 D_i
 
@@ -401,9 +456,7 @@ D_i
 0.5 × D_alg
 ```
 
----
-
-## Dla standardowego wydziału
+Dla standardowego wydziału:
 
 ```text
 50% poprzedni rok
@@ -411,62 +464,31 @@ D_i
 50% nowy algorytm
 ```
 
----
-
-## WTK jest wyjątkiem
-
-WTK powstał:
-
-```text
-01.04.2025
-```
-
-Nie posiadał własnej historii subwencji.
-
-Dlatego bardzo prawdopodobne jest, że:
-
-```text
-5 mln zł
-
-=
-finansowanie startowe
-+
-algorytm
-```
-
-a nie wyłącznie wynik wzorów.
+WTK jest wyjątkiem ze względu na utworzenie wydziału w 2025 roku.
 
 ---
 
-# Jakie tabele powinien mieć WTK Strategic Planner?
+# Dane wymagane przez WTK Strategic Planner
 
 ## STUDENCI
 
 | Kierunek | Rok | PL | Zagr |
 | -------- | --- | -: | ---: |
 
----
-
 ## KADRA
 
 | Typ | Polska | Zagranica |
 | --- | -----: | --------: |
-
----
 
 ## BADANIA
 
 | Dyscyplina |  N | KS | Kategoria |
 | ---------- | -: | -: | --------- |
 
----
-
 ## PROJEKTY
 
 | Program | Kwota |
 | ------- | ----: |
-
----
 
 ## AGH BASELINE
 
